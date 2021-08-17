@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { PAGINATION_QUERY } from '../components/Pagination';
 
 export default function paginationField() {
   return {
@@ -7,15 +7,8 @@ export default function paginationField() {
       const { skip, first } = args;
 
       const data = cache.readQuery({
-        query: gql`
-          query {
-            _allProductsMeta {
-              count
-            }
-          }
-        `,
+        query: PAGINATION_QUERY
       });
-      console.log(data);
       const count = data?._allProductsMeta?.count;
       const page = skip / first + 1;
       const pages = Math.ceil(count / first);
