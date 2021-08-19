@@ -3,10 +3,12 @@ import { createAuth } from '@keystone-next/auth';
 import { User } from './schemas/User';
 import { Product } from './schemas/Product';
 import { ProductImage } from './schemas/ProductImage';
+import { CartItem } from './schemas/CartItem';
 import { config, createSchema } from '@keystone-next/keystone/schema';
 import 'dotenv/config';
 import { withItemData, statelessSessions } from '@keystone-next/keystone/session';
 import { insertSeedData } from './seed-data';
+import { sendPasswordResetEmail } from './lib/mail';
 
 const databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/keystone-sickfits-tutorial';
 
@@ -24,7 +26,7 @@ const { withAuth } = createAuth({
     },
     passwordResetLink: {
         async sendToken(args) {
-            
+            await sendPasswordResetEmail(args.token, args.identity)
         }
     }
 })
@@ -50,6 +52,7 @@ export default withAuth(config ({
         User,
         Product,
         ProductImage,
+        CartItem,
     }),
     ui: {
         isAccessAllowed: ({ session }) => {
