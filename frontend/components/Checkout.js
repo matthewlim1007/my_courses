@@ -80,7 +80,7 @@ function CheckoutForm() {
     console.log(order);
 
     router.push({
-      pathname: '/order',
+      pathname: '/order/[id]',
       query: { id: order.data.checkout.id },
     });
 
